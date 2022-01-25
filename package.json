@@ -1,0 +1,15 @@
+{
+  "name": "serenbot",
+  "version": "1.0.0",
+  "description": "Slack bot for easy prompts",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "Slack",
+    "bot"
+  ],
+  "author": "Damola Adewunmi",
+  "license": "MIT"
+}

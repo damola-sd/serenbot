@@ -29,6 +29,13 @@ app.message("hello", async ({ message, say }) => {
   await say(`Hey there <@${message.user}>!`);
 });
 
+app.message("time", async ({ message, say }) => {
+  // say() sends a message to the channel where the event was triggered
+  await say(
+    `Hey there <@${message.user}>! the time is <${Date.now().toLocaleString()}`
+  );
+});
+
 (async () => {
   // Start the app
   await app.start(process.env.PORT || 3000);

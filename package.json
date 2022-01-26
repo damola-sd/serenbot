@@ -20,7 +20,10 @@
     "@slack/web-api": "^6.6.0",
     "body-parser": "^1.19.1",
     "dotenv": "^14.3.0",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "jest": "^27.4.7",
+    "monk": "^7.3.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

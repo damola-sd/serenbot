@@ -4,7 +4,7 @@
   "description": "Slack bot for easy prompts",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },

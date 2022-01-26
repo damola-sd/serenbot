@@ -1,28 +1,15 @@
 require("dotenv").config({ path: __dirname + "/.env" });
-const yup = require("yup");
 
-const db = require("./db");
+const saveToDB = require("./savetoDB");
 
 const PORT = process.env.PORT || 3000;
 
-const responseSchema = yup.object().shape({
-  user_id: yup.string().required().trim(),
-  user_name: yup.string().required().trim(),
-  mood: yup.string().required(),
-  hobby: yup.string().required(),
-});
-
 const eventsApi = require("@slack/events-api");
 const { App } = require("@slack/bolt");
-// const slackEvents = eventsApi.createEventAdapter(
-//   process.env.SLACK_SIGNING_SECRET
-// );
-// console.log(process.env.SEREN_TOKEN);
+
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN,
-  // socketMode: true,
-  // appToken: process.env.SEREN_TOKEN,
 });
 const token = process.env.SLACK_BOT_TOKEN;
 const data = {};
@@ -32,28 +19,15 @@ const client = new WebClient(token, {
   logLevel: LogLevel.DEBUG,
 });
 
+// Hello Message Bit responds to
 app.message("hello", async ({ message, say }) => {
-  // say() sends a message to the channel where the event was triggered
-  // console.log(message);
   await say(`Hey there <@${message.user}>!`);
 });
 
-const saveToDB = async (data) => {
-  try {
-    await responseSchema.validate(data);
-    const saved = await db.insert(data);
-    if (saved) {
-      return `${data.user_name}'s responses saved to the DB`;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+// Bot Slash Command
 app.command("/bot", async ({ command, ack, say }) => {
   try {
     await ack();
-    console.log(command);
     data.user_id = command.user_id;
     data.user_name = command.user_name;
     // console.log(command.text);
@@ -108,10 +82,10 @@ app.command("/bot", async ({ command, ack, say }) => {
   }
 });
 
+//Action Id Mood for interactive user response
 app.action("mood", async ({ action, ack, say }) => {
   try {
     await ack();
-    console.log(action);
     data.mood = action.selected_option.value;
     say({
       blocks: [
@@ -178,13 +152,12 @@ app.action("mood", async ({ action, ack, say }) => {
   }
 });
 
+//Action id Hobbies for Interactive user response
 app.action("hobbies", async ({ action, ack, say }) => {
   try {
     await ack();
-    console.log(action);
     data.hobby = action.selected_option.value;
     say("thank you");
-    // console.log(data);
     console.log(await saveToDB(data));
   } catch (error) {
     console.error(error);
@@ -197,7 +170,3 @@ app.action("hobbies", async ({ action, ack, say }) => {
 
   console.log("⚡️ Bolt app is running!");
 })();
-
-// app.listen(PORT, () => {
-//   console.log(`App listening at http://localhost:${PORT}`);
-// });

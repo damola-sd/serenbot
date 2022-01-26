@@ -26,14 +26,20 @@ const client = new WebClient(token, {
 
 app.message("hello", async ({ message, say }) => {
   // say() sends a message to the channel where the event was triggered
+  // console.log(message);
   await say(`Hey there <@${message.user}>!`);
 });
 
-app.message("time", async ({ message, say }) => {
-  // say() sends a message to the channel where the event was triggered
-  await say(
-    `Hey there <@${message.user}>! the time is <${Date.now().toLocaleString()}`
-  );
+app.command("/bot", async ({ command, ack, say }) => {
+  try {
+    await ack();
+    // console.log(command.text);
+    if (command.text.includes("hello")) {
+      say("Welcome. How are you doing?");
+    }
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 (async () => {

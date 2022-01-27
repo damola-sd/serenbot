@@ -157,7 +157,7 @@ app.action("hobbies", async ({ action, ack, say }) => {
   try {
     await ack();
     data.hobby = action.selected_option.value;
-    say("thank you");
+    say("Thank You");
     console.log(await saveToDB(data));
   } catch (error) {
     console.error(error);
